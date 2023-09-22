@@ -1,5 +1,5 @@
-export interface IMessagesResponse {
-  content: IContent[];
+export interface IPageable<T> {
+  content: T[];
   totalElements: number;
   pageNo?: number;
   pageSize?: number;
@@ -7,7 +7,7 @@ export interface IMessagesResponse {
   last?: boolean;
 }
 
-export interface IContent {
+export interface IMessagesResponse {
   id?: string;
   requestmessage: string;
   responsemessage: IResponseMessage[];
@@ -28,4 +28,10 @@ export interface IData {
 
 export interface IResponseMessage {
   text: string;
+}
+
+export interface INotification {
+  id: string;
+  content: string;
+  date: string;
 }

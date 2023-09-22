@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
   NotFoundException,
   Param,
   Post,
@@ -21,7 +20,6 @@ export class ConversationsController {
   }
 
   @Post()
-  @HttpCode(201)
   async create(
     @Body() conversation: ConversationEntity
   ): Promise<ConversationEntity> {

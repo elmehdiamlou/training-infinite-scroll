@@ -1,6 +1,6 @@
 import { Button, Col, Form, Input, Row } from 'antd';
 import Loading from '../../loading/loading';
-import { IContent, IMessagesResponse } from '../../../utils/interfaces';
+import { IMessagesResponse, IPageable } from '../../../utils/interfaces';
 import { httpPromise } from '../../../utils/http';
 import { dateOptions } from '../../../utils/constants';
 import { SendOutlined } from '@ant-design/icons';
@@ -17,7 +17,7 @@ export function ConversationMessages({
 }: ConversationMessagesProps) {
   const [pageNo, setPageNo] = useState(0);
 
-  const [messages, setMessages] = useState<IMessagesResponse>();
+  const [messages, setMessages] = useState<IPageable<IMessagesResponse>>();
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
 
@@ -34,7 +34,7 @@ export function ConversationMessages({
     const url = `/messages?${params.toString()}`;
 
     httpPromise(url, 'POST', { conversationId })
-      .then((data: IMessagesResponse) => {
+      .then((data: IPageable<IMessagesResponse>) => {
         if (pageNo === 0) {
           setMessages({
             ...data,
@@ -68,7 +68,6 @@ export function ConversationMessages({
       (entries) => {
         if (
           messages?.content &&
-          messages?.content?.length !== messages?.totalElements &&
           messages?.content?.length < messages?.totalElements &&
           entries[0].isIntersecting &&
           messages?.content.at(-1)?.responsemessage[0]?.text &&
@@ -120,9 +119,9 @@ export function ConversationMessages({
         return;
 
       const updatedMessages = (
-        content: IContent[],
+        content: IMessagesResponse[],
         text = '',
-        responseContent?: IContent
+        responseContent?: IMessagesResponse
       ) => {
         const newMessage = {
           requestmessage: message,
@@ -152,7 +151,7 @@ export function ConversationMessages({
           httpPromise(`/messages/${conversationId}`, 'POST', {
             message,
           })
-            .then((data: IContent) => {
+            .then((data: IMessagesResponse) => {
               if (messages?.content && message) {
                 if (
                   messages.content.length > 9 &&

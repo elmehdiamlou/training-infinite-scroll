@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, HttpCode, Param, Post, Query } from '@nestjs/common';
 import { MessageEntity } from '../../entities/message.entity';
 import { MessagesService } from '../../services/messages/messages.service';
 import { PageDto } from '../../entities/page.dto';
@@ -8,6 +8,7 @@ export class MessagesController {
   constructor(private readonly messageService: MessagesService) {}
 
   @Post()
+  @HttpCode(200)
   async findByConversationId(
     @Query('pageNo') pageNo: number,
     @Body() { conversationId }: { conversationId: string }
